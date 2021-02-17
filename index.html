@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet">
+    <link href="https://github.com/manifestinteractive/weather-underground-icons.git" rel="stylesheet">
+    <script src="script.js" defer></script>
+    <title>Weather App</title>
+</head>
+<body>
+    <div class="card">
+        <!-- Search bar -->
+        <form class="search" action=""> <!--action_page.php-->
+            <input type="text" placeholder="Search by city name" name="search" class="search-bar">
+            <button type="submit"><img src="https://img.icons8.com/fluent-systems-filled/24/ffffff/search.png" class="search-btn"/></button>
+        </form>
+        <!--
+        <div class="search">
+            <input type="text" placeholder="Search by city name" class="search-bar">
+            <button type="submit" class="search-bar"><img src="https://img.icons8.com/fluent-systems-filled/24/ffffff/search.png"/></button>
+        </div>
+        -->
+        <div class="notification"></div>
+        <div class="weather-container">
+            <div class="location">
+                <p>-</p>
+            </div>
+            <div class="temp-description">
+                <p>-</p>
+            </div>
+            <div class="weather-icon">
+                <img src="icons/nt_unknown.png" alt="">
+            </div>
+            <div class="temp-value">
+                <p>- °<span>C</span></p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

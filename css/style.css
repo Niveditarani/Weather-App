@@ -1,0 +1,124 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body{
+    font-family: 'Lato', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: rgb(58, 58, 58);
+    color: #fff;
+    font-size: 100%;
+}
+.card{
+    background-color: #161616;
+    display: block;
+    padding: 3em;
+    border-radius: 30px;
+    width: 100%;
+    max-width: 420px;
+    /* margin: 1em; */
+}
+.search{
+    background-color: #161616;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: .5em;
+    outline: 0;
+}
+input.search-bar{
+    position: relative;
+    border: none;
+    outline: none;
+    padding: .4em 1.2em;
+    border-radius: 18px;
+    width: 95%;
+    background-color: #7c7c7c2b;
+    color: rgb(199, 190, 178);
+    font-family: inherit;
+    font-size: 100%;
+}
+
+form.search button{
+    float: left;
+    margin: 0.3em;
+    border-radius: 50%;
+    border: none;
+    height: 32px;
+    width: 32px;
+    outline: none;
+    background-color: #161616;
+    color: rgb(199, 190, 178);
+    font-size: .5em;
+    opacity: .4;
+    cursor: pointer;
+    transition: .2s ease-in-out;
+}
+button:hover{
+    background-color: #8d89899b;
+}
+/* Clear floats */
+form.search::after {
+    content: "";
+    clear: both;
+    display: table;
+  }
+.notification{
+    background-color: #7c7c7c2b;
+    display: none;
+}
+.notification p{
+    color: rgb(199, 190, 178);
+    font-size: 1em;
+    margin: 0;
+    text-align: center;
+    padding: 10px 0;
+    box-sizing: content-box;
+    /* width: 100%; */
+}
+.weather-container{
+    width: 300px;
+    height: 420px;
+}
+.weather-icon{
+    width: 300px;
+    height: 128px;
+}
+.weather-icon img{
+    display: block;
+    margin: 0 auto;
+}
+.temp-value{
+    width: 300px;
+    height: 60px;
+}
+.temp-value p{
+    padding: 0;
+    margin: 0;
+    color: #fff;
+    font-size: 4em;
+    text-align: center;
+    cursor: pointer;
+}
+.temp-value span{
+    font-size: .7em;
+}
+.temp-description p{
+    padding: 8px;
+    text-align: center;
+    color: #fff;
+    margin: 0;
+    font-size: .8em;
+}
+.location p{
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    color: #fff;
+    font-size: 1.2em;
+}
