@@ -4,41 +4,62 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/style.css">
     <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet">
-    <link href="https://github.com/manifestinteractive/weather-underground-icons.git" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
     <script src="script.js" defer></script>
     <title>Weather App</title>
 </head>
 <body>
-    <div class="card">
-        <!-- Search bar -->
-        <form class="search" action=""> <!--action_page.php-->
-            <input type="text" placeholder="Search by city name" name="search" class="search-bar">
-            <button type="submit"><img src="https://img.icons8.com/fluent-systems-filled/24/ffffff/search.png" class="search-btn"/></button>
-        </form>
-        <!--
-        <div class="search">
-            <input type="text" placeholder="Search by city name" class="search-bar">
-            <button type="submit" class="search-bar"><img src="https://img.icons8.com/fluent-systems-filled/24/ffffff/search.png"/></button>
-        </div>
-        -->
+    <div class="container">
+        <!-- <div class="wrapper"> -->
+            <div class="search-box">
+                <input type="text" id="search" placeholder="Search by city name" autocomplete="off"> 
+                <div class="search-btn">
+                    <img src="icons/magnify.png" alt="location" >
+                </div> 
+            <!-- </div>  -->
+        </div>         
+            <!-- <div class="location-icon">
+                <img src="icons/location0.png" alt="location">
+            </div> -->
+        
         <div class="notification"></div>
-        <div class="weather-container">
-            <div class="location">
-                <p>-</p>
-            </div>
+        <main>
+            <section class="location">
+                <div class="city"></div>
+                <div class="date"></div>
+            </section>
             <div class="temp-description">
                 <p>-</p>
             </div>
             <div class="weather-icon">
                 <img src="icons/nt_unknown.png" alt="">
+
             </div>
             <div class="temp-value">
-                <p>- °<span>C</span></p>
+                <p>-°<span>C</span></p>
             </div>
-        </div>
+            <div class="feels-like">
+                <p>Feels like:<span> -</span>°C</p>
+            </div>
+            <section class="info">
+                <div class="wind-speed">
+                    <img src="icons/wind-speed.png" alt="wind-speed">
+                    <p>Wind-speed:<span> - </span> m/s</p> 
+                </div>
+                <div class="humidity">
+                    <img src="icons/hygrometer.png" alt="hygrometer">
+                    <p>Humidity:<span> - </span>%</p>
+                </div>
+            </section>
+           <div class="footer-bottom">
+                <p><small>Nivedita Rani 2021| Developed with &#x2764;</small></p>
+                <!-- <a href="https://openweathermap.org/" class="open-weather">Powered by OpenWeather</a> -->
+            </div>
+        </main>
+        
     </div>
+    
 </body>
 </html>
