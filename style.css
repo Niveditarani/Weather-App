@@ -22,6 +22,7 @@ body{
     border-radius: 30px;
     width: 100%;
     max-width: 420px;
+    height: 700px;
     box-shadow: 5px 10px 20px #1a1919; 
     margin: 0 auto;
 }
@@ -96,7 +97,7 @@ main {
     align-items: center;
     text-align: center;
     width: 100%;
-    height: 420px;
+    height: 650px;
 }
 .city{
     color: #fff;
@@ -188,6 +189,57 @@ main {
     position: relative;
     top: 6.8px;
 }
+/*********Tab-Style *****************/
+.tab{
+    overflow: hidden;
+    margin-top: 18px;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    /* margin-left: -12px; */
+}
+/*********Button-Style *****************/
+.tab button{
+    background: #064e452b;
+    color: #fff;
+    opacity: .4;
+    font-family: inherit;
+    letter-spacing: 0.1em;
+    font-size: .8em;
+    float: left;
+    border: #F7FFF7;
+    border-collapse: collapse;
+    outline: none;
+    cursor: pointer;
+    padding: 10px 15px;
+    transition: 0.3s;
+}
+hr{
+    width: 100%;
+    padding: 0px;
+} 
+/*********change button-background color on hover**************************************/
+.tab button:hover{
+    background: #064e452b;
+    color: #F7FFF7;
+    /* font-weight: bold; */
+}
+/* Create an active/current tablink class */
+.tab button.active {
+    background: #00ffdd2b;
+    color: #F7FFF7;
+    opacity: 1;
+}
+/* Fading effect takes 1 second */
+.tabcontent {
+    animation: fadeEffect 1s; 
+}
+  
+/* Go from zero to full opacity */
+@keyframes fadeEffect {
+    from {opacity: 0;}
+    to {opacity: 1;}
+  }
 .clearfooter{
     height: 330px;
     clear: both;
@@ -232,6 +284,8 @@ main {
         max-width: 420px;
         height: 100%;
         margin: 0;
+        /* padding: 2em; */
+        /* padding-top: 3em; */
         justify-content: center;
         text-align: center;
         /* margin-top: -10px; */

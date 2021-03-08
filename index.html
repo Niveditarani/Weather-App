@@ -8,6 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <script src="script.js" defer></script>
+    <script src="tabScript.js" defer></script>
     <title>Weather App</title>
 </head>
 <body>
@@ -53,10 +54,28 @@
                     <p>Humidity:<span> - </span>%</p>
                 </div>
             </section>
-           <div class="footer-bottom">
-                <p><small>Nivedita Rani 2021| Developed with &#x2764;</small></p>
-                <!-- <a href="https://openweathermap.org/" class="open-weather">Powered by OpenWeather</a> -->
+            <!---------------Hourly & Daily Forecast tab links-->
+            <div class="tab">
+                <button class="tablinks" onclick="openForecast(event, 'hourly')" id="defaultOpen">Hourly</button>
+                <button class="tablinks" onclick="openForecast(event,'daily')">Daily</button>
             </div>
+            <hr>
+            <!------------Tab content------>
+            <div id="hourly" class="tabcontent">
+                <table id="hourlyForecast" width=100%>
+                    <!-- <p>copenhagen hourly status.</p> -->
+                    <!-- <span onclick="this.parentElement.style.display='none'">x</span> -->
+                </table>
+            </div>
+            <div id="daily" class="tabcontent">
+                <table id="dailyForecast" width=100%>
+                    <!-- <p>India's daily status.</p> -->
+                </table>
+            </div>
+           <!-- <div class="footer-bottom">
+                <p><small>Nivedita Rani 2021| Developed with &#x2764;</small></p>
+                <a href="https://openweathermap.org/" class="open-weather">Powered by OpenWeather</a>
+            </div> -->
         </main>
         
     </div>
