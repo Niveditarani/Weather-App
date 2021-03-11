@@ -1,8 +1,11 @@
 //api key: 2e2402e031527e1ced45dbbe88d99f0a
+//google api key: AIzaSyDK16Af43f5fBCpHMQBqzE0_2FdzeRe29I
+
 
 // SELECT ELEMENTS
 const searchElement = document.querySelector(".search-btn");
 const cityElement = document.querySelector(".city");
+// const countryElement = document.querySelector(".country");
 const dateElement = document.querySelector(".date");
 const descElement = document.querySelector(".temp-description p");
 const iconElement = document.querySelector(".weather-icon");
@@ -69,59 +72,168 @@ else
 function getSearchWeather(city){
    // var city = input.value;
 
-    let api = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${key}`
+    let api = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${key}`;
+    let periodicData = "";
+    let apiName = "city";
     fetch(api)
         .then(function(response){
             let data = response.json();
             return data;
         })
         .then (function(data){
-            weather.temperature.value = Math.floor(data.main.temp - KELVIN);
-            weather.feels= Math.floor(data.main.feels_like- KELVIN);
-            weather.description = data.weather[0].description;
-            weather.iconId = data.weather[0].icon;
-            weather.city = data.name;
-            weather.country = data.sys.country;
-            weather.wind = data.wind.speed;
-            weather.humidity = data.main.humidity;
+            periodicData = data;
+            var resultsHTML = "";
+            weather.temperature.value = Math.floor(data.list[0].main.temp - KELVIN);
+            weather.feels= Math.floor(data.list[0].main.feels_like- KELVIN);
+            weather.description = data.list[0].weather[0].description;
+            weather.iconId = data.list[0].weather[0].icon;
+            weather.city = data.city.name;
+            weather.country = data.city.country;
+            weather.wind = data.list[0].wind.speed;
+            weather.humidity = data.list[0].main.humidity;
         })
         .then (function(){
-            displayWeather();
+            displayWeather(periodicData.list, apiName);
         });
 }
 function getWeather(latitude, longitude){
-    let api = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${key}`;
+    let api = `https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&exclude=minutely,alerts&appid=${key}`;
+    let periodicData = "";
+    let apiName = "geoLoc";
     fetch(api)
         .then(function(response){
             let data = response.json();
+            // console.log(data);
             return data;
         })
         .then (function(data){
-            weather.temperature.value = Math.floor(data.main.temp - KELVIN);
-            weather.feels= Math.floor(data.main.feels_like- KELVIN);
-            weather.description = data.weather[0].description;
-            weather.iconId = data.weather[0].icon;
-            weather.city = data.name;
-            weather.country = data.sys.country;
-            weather.wind = data.wind.speed;
-            weather.humidity = data.main.humidity;
+            periodicData = data;
+            var resultsHTML = "";
+            // var ts= new Date(data.current.dt * 1000);
+            weather.temperature.value = Math.floor(data.current.temp - KELVIN);
+            weather.feels= Math.floor(data.current.feels_like- KELVIN);
+            weather.description = data.current.weather[0].description;
+            weather.iconId = data.current.weather[0].icon;
+            weather.city = data.timezone;
+            weather.country = "";
+            weather.wind = data.current.wind_speed;
+            weather.humidity = data.current.humidity;
+        })
+        .catch(err => {
+            // Do something for an error here
+            throw (`Sorry, An Error occured.  ${err}`);
         })
         .then (function(){
-            displayWeather();
+            displayWeather(periodicData.hourly, apiName);
         });
 }
 //display weather to UI
-function displayWeather(){
+function displayWeather(hourlyInfo, apiName){
     iconElement.innerHTML = `<img src="icons/${weather.iconId}.png"/>`;
     tempElement.innerHTML = `${weather.temperature.value}°<span>C</span>`;
     descElement.innerHTML = weather.description;
-    cityElement.innerHTML = `${weather.city}, ${weather.country} `;
+    cityElement.innerHTML = ` ${weather.city} ${weather.country}`;
+    // countryElement.innerHTML = ` ,`;
     feelsLikeElement.innerHTML = ` ${weather.feels}`;
     windElement.innerHTML = ` ${weather.wind}`;
     humidityElement.innerHTML = ` ${weather.humidity}`;
     let now = new Date();
     dateElement.innerHTML = dateBuilder(now);
+    //render the forcasts tabs
+    if(apiName === "geoLoc"){
+        document.getElementById("hourlyForecast").innerHTML = renderHourlyForecast(hourlyInfo);
+    } else{
+        document.getElementById("hourlyForecast").innerHTML = renderCityHourlyFc(hourlyInfo);
+    }
 }
+//render the hourly forecast
+function renderHourlyForecast(fcData) {
+
+    let resultsHTML = "<tr><th>Time</th><th>Condition</th><th>Temp</th></tr>";
+    let rowcount = "";
+    rowcount = fcData.length;
+    if (rowcount > 5) {
+        rowcount = 5;
+    }
+
+    for (i = 0; i < rowcount; i++) {
+
+        let ts = new Date(fcData[i].dt * 1000);
+        let wIcon = "";
+        let summary = "";
+        let tempVal = 0;
+        let timeValue;
+        let windSpeed = "";
+
+        //unix time needs to be formatted for display
+        let hours = ts.getHours();
+        if (hours > 0 && hours <= 12) {
+            timeValue = "" + hours;
+        } else if (hours > 12) {
+            timeValue = "" + (hours - 12);
+        } else if (hours == 0) {
+            timeValue = "12";
+        }
+        timeValue += (hours >= 12) ? " PM" : " AM"; // get AM/PM
+        weather.temperature.value = Math.floor(fcData[i].temp - KELVIN);
+        wIcon = fcData[i].weather[0].icon;
+        pic = `<img src="icons/${wIcon}.png" width= "20px" height = "20px"/>`
+        summary = fcData[i].weather[0].description;
+        tempVal = `${weather.temperature.value}°C`;
+        windSpeed = `${fcData[i].wind_speed}m/s`;
+        resultsHTML += renderRow(timeValue, pic, tempVal);
+
+    }
+
+    return resultsHTML;
+}
+//render the City hourly forecast
+function renderCityHourlyFc(fcData) {
+
+    let resultsHTML = "<tr><th>Time</th><th>Condition</th><th>Temp</th></tr>";
+    let rowcount = "";
+    rowcount = fcData.length;
+    if (rowcount > 5) {
+        rowcount = 5;
+    }
+
+    for (i = 0; i < rowcount; i++) {
+
+        let ts = new Date(fcData[i].dt * 1000);
+        let wIcon = "";
+        let summary = "";
+        let tempVal = 0;
+        let timeValue;
+        let windSpeed = "";
+
+        //unix time needs to be formatted for display
+        let hours = ts.getHours();
+        if (hours > 0 && hours <= 12) {
+            timeValue = "" + hours;
+        } else if (hours > 12) {
+            timeValue = "" + (hours - 12);
+        } else if (hours == 0) {
+            timeValue = "12";
+        }
+        timeValue += (hours >= 12) ? " PM" : " AM"; // get AM/PM
+        weather.temperature.value = Math.floor(fcData[i].main.temp - KELVIN);
+        wIcon = fcData[i].weather[0].icon;
+        pic = `<img src="icons/${wIcon}.png" width= "18px" height = "18px"/>`
+        // summary = fcData[i].weather[0].description;
+        tempVal = `${weather.temperature.value}°C`;
+        windSpeed = `${fcData[i].wind_speed}m/s`;
+        resultsHTML += renderRow(timeValue, pic, tempVal);
+
+    }
+
+    return resultsHTML;
+}
+
+//template function to render grid colums
+function renderRow(timeValue, wIcon, tempVal) {
+    return `<tr><td>${timeValue}</td><td>${wIcon}</td><td>${tempVal}</td></tr>`
+}
+
 function dateBuilder (d) {
     let months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
     let days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
