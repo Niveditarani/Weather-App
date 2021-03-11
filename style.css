@@ -22,7 +22,7 @@ body{
     border-radius: 30px;
     width: 100%;
     max-width: 420px;
-    height: 700px;
+    height: 750px;
     box-shadow: 5px 10px 20px #1a1919; 
     margin: 0 auto;
 }
@@ -191,7 +191,10 @@ main {
 }
 /*********Tab-Style *****************/
 .tab{
-    overflow: hidden;
+    display: inline-block;
+    /* margin: 50px; */
+    padding-bottom: 10px;
+    /* overflow: hidden; */
     margin-top: 18px;
     width: 100%;
     display: flex;
@@ -200,6 +203,7 @@ main {
 }
 /*********Button-Style *****************/
 .tab button{
+    /* display: inline-block; */
     background: #064e452b;
     color: #fff;
     opacity: .4;
@@ -212,7 +216,7 @@ main {
     outline: none;
     cursor: pointer;
     padding: 10px 15px;
-    transition: 0.3s;
+    transition: 0.4s;
 }
 hr{
     width: 100%;
@@ -220,8 +224,11 @@ hr{
 } 
 /*********change button-background color on hover**************************************/
 .tab button:hover{
-    background: #064e452b;
-    color: #F7FFF7;
+    background: #F7FFF7;
+    color: black;
+    /* transform: scale(1.2);
+    -ms-transform: scale(1.2); 
+    -webkit-transform: scale(1.2);  */
     /* font-weight: bold; */
 }
 /* Create an active/current tablink class */
@@ -232,8 +239,43 @@ hr{
 }
 /* Fading effect takes 1 second */
 .tabcontent {
+    display: inline-block;
+    position: relative;
     animation: fadeEffect 1s; 
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+    margin-top: 10px;
 }
+.fc-table{
+    width: 100%;
+    /* display: table; */
+}
+/* .h-body{
+    display: table-row-group;
+}
+.h-row{
+    display: table-row;
+}
+.h-cell{
+    display: table-cell;
+}
+#myElement1{
+    font-size: .7em; 
+    letter-spacing: 0.1em;
+    text-align: center;
+} */
+#hourlyForecast{
+    font-size: .7em;
+    /* width: 12px; */
+    /* height: 12px; */
+    text-align: center;
+}
+/* #myElement3{
+    font-size: .7em; 
+    letter-spacing: 0.1em;
+    text-align: center;
+} */
   
 /* Go from zero to full opacity */
 @keyframes fadeEffect {
