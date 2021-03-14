@@ -268,7 +268,7 @@ function renderCityDailyForecast(fcData) {
     let firstItem = 0;
     for (i = 0; i < rowcount; i++) {
         let prevDate = i===0?fcData[i].dt_txt.substring(0, 10):fcData[i-1].dt_txt.substring(0, 10);
-        if(prevDate!=fcData[i].dt_txt.substring(0, 10) || firstItem===0){
+        if(prevDate!=fcData[i].dt_txt.substring(0, 10)){
             firstItem = 1;
             let ts = new Date(fcData[i].dt * 1000);
             let days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
