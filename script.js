@@ -1,7 +1,3 @@
-//api key: 2e2402e031527e1ced45dbbe88d99f0a
-//google api key: AIzaSyDK16Af43f5fBCpHMQBqzE0_2FdzeRe29I
-
-
 // SELECT ELEMENTS
 const searchElement = document.querySelector(".search-btn");
 const cityElement = document.querySelector(".city");
@@ -39,8 +35,8 @@ weather.temperature = {
 }
 // APP CONSTS AND VARS
 const KELVIN = 273;
-// API KEY
-const key = "2e2402e031527e1ced45dbbe88d99f0a";
+// API KEY Moved to server side/Nodejs Application
+const key = "";
 
 //check if browser support geolocation
 if('geolocation' in navigator){
@@ -70,9 +66,9 @@ else
     getSearchWeather(input.value);
 })
 function getSearchWeather(city){
-   // var city = input.value;
+   // var city = input.value;https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${key}
 
-    let api = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${key}`;
+    let api = `https://project-weather-api-dk.herokuapp.com/getWeatherbyCity/?city=${city}`;
     let periodicData = "";
     let apiName = "city";
     fetch(api)
@@ -97,7 +93,7 @@ function getSearchWeather(city){
         });
 }
 function getWeather(latitude, longitude){
-    let api = `https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&exclude=minutely,alerts&appid=${key}`;
+    let api = `https://project-weather-api-dk.herokuapp.com/getWeatherbyPosition/?lat=${latitude}&lon=${longitude}`;
     let periodicData = "";
     let apiName = "geoLoc";
     fetch(api)
@@ -124,11 +120,11 @@ function getWeather(latitude, longitude){
             throw (`Sorry, An Error occured.  ${err}`);
         })
         .then (function(){
-            displayWeather(periodicData.hourly, apiName);
+            displayWeather(periodicData, apiName);
         });
 }
 //display weather to UI
-function displayWeather(hourlyInfo, apiName){
+function displayWeather(periodicData, apiName){
     iconElement.innerHTML = `<img src="icons/${weather.iconId}.png"/>`;
     tempElement.innerHTML = `${weather.temperature.value}°<span>C</span>`;
     descElement.innerHTML = weather.description;
@@ -141,12 +137,14 @@ function displayWeather(hourlyInfo, apiName){
     dateElement.innerHTML = dateBuilder(now);
     //render the forcasts tabs
     if(apiName === "geoLoc"){
-        document.getElementById("hourlyForecast").innerHTML = renderHourlyForecast(hourlyInfo);
+        document.getElementById("hourlyForecast").innerHTML = renderHourlyForecast(periodicData.hourly);
+        document.getElementById("dailyForecast").innerHTML = renderDailyForecast(periodicData.daily);
     } else{
-        document.getElementById("hourlyForecast").innerHTML = renderCityHourlyFc(hourlyInfo);
+        document.getElementById("hourlyForecast").innerHTML = renderCityHourlyFc(periodicData);
+        document.getElementById("dailyForecast").innerHTML = renderCityDailyForecast(periodicData);
     }
 }
-//render the hourly forecast
+//render the hourly forecast-1
 function renderHourlyForecast(fcData) {
 
     let resultsHTML = "<tr><th>Time</th><th>Condition</th><th>Temp</th></tr>";
@@ -177,7 +175,7 @@ function renderHourlyForecast(fcData) {
         timeValue += (hours >= 12) ? " PM" : " AM"; // get AM/PM
         weather.temperature.value = Math.floor(fcData[i].temp - KELVIN);
         wIcon = fcData[i].weather[0].icon;
-        pic = `<img src="icons/${wIcon}.png" width= "20px" height = "20px"/>`
+        pic = `<img src="icons/${wIcon}.png" width= "18px" height = "18px"/>`
         summary = fcData[i].weather[0].description;
         tempVal = `${weather.temperature.value}°C`;
         windSpeed = `${fcData[i].wind_speed}m/s`;
@@ -187,7 +185,7 @@ function renderHourlyForecast(fcData) {
 
     return resultsHTML;
 }
-//render the City hourly forecast
+//render the City hourly forecast-2
 function renderCityHourlyFc(fcData) {
 
     let resultsHTML = "<tr><th>Time</th><th>Condition</th><th>Temp</th></tr>";
@@ -228,8 +226,69 @@ function renderCityHourlyFc(fcData) {
 
     return resultsHTML;
 }
+//render the weekly forecast-1
+function renderDailyForecast(fcData) {
 
-//template function to render grid colums
+    let resultsHTML = "<tr><th>Day</th><th>Condition</th><th>Temp</th></tr>";
+    let rowcount = "";
+    rowcount = fcData.length;
+    if (rowcount > 5) {
+        rowcount = 6;
+    }
+
+    for (i = 1; i < rowcount; i++) {
+
+        let ts = new Date(fcData[i].dt * 1000);
+        let tempVal = 0;
+        let wIcon = "";
+        let days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+        let dayTime = days[ts.getDay()];
+        wIcon = fcData[i].weather[0].icon;
+        pic = `<img src="icons/${wIcon}.png" width= "18px" height = "18px"/>`
+        // let summary = fcData.data[i].summary;
+        weather.temperature.value = Math.floor(fcData[i].temp.max - KELVIN);
+        tempVal = `${weather.temperature.value}°C`;
+        // let tempHigh = `${Math.round(fcData.data[i].temperatureHigh)}&deg`;
+        // let tempLow = `${Math.round(fcData.data[i].temperatureLow)}&deg`;
+
+        resultsHTML += renderRow(dayTime, pic, tempVal);
+    }
+
+    return resultsHTML;
+}
+//render the city's weekly forecast-2
+function renderCityDailyForecast(fcData) {
+
+    let resultsHTML = "<tr><th>Day</th><th>Condition</th><th>Temp</th></tr>";
+    let rowcount = "";
+    rowcount = fcData.length;
+    if (rowcount > 5) {
+        rowcount = 40;
+    }
+    let firstItem = 0;
+    for (i = 0; i < rowcount; i++) {
+        let prevDate = i===0?fcData[i].dt_txt.substring(0, 10):fcData[i-1].dt_txt.substring(0, 10);
+        if(prevDate!=fcData[i].dt_txt.substring(0, 10) || firstItem===0){
+            firstItem = 1;
+            let ts = new Date(fcData[i].dt * 1000);
+            let days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+            let dayTime = days[ts.getDay()];
+            wIcon = fcData[i].weather[0].icon;
+            pic = `<img src="icons/${wIcon}.png" width= "18px" height = "18px"/>`
+            // let summary = fcData.data[i].summary;
+            weather.temperature.value = Math.floor(fcData[i].main.temp - KELVIN);
+            tempVal = `${weather.temperature.value}°C`;
+            // let tempHigh = `${Math.round(fcData.data[i].temperatureHigh)}&deg`;
+            // let tempLow = `${Math.round(fcData.data[i].temperatureLow)}&deg`;    
+           resultsHTML += renderRow(dayTime, pic, tempVal);
+        }
+        
+    }
+
+    return resultsHTML;
+}
+
+//function to render grid colums
 function renderRow(timeValue, wIcon, tempVal) {
     return `<tr><td>${timeValue}</td><td>${wIcon}</td><td>${tempVal}</td></tr>`
 }
