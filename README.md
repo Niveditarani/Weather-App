@@ -8,7 +8,8 @@ This app initially fetches the weather information using geolocation API. Displa
 For this Weather App, I’ve used cloud based services like Heroku & Netlify, that supports node.js and free web hosting. 
 Challenges that I faced while developing this web app:
 -->	Limitations in using free subscription APIs of Openweathermap. E:g- To fetch the weekly forecast data using search by city name details were omitted in the API documentation. Rather it was mentioned as 3hrs data for the next five days (i.e., forecast for every 3hrs in 24hrs * 5days). So, to fetch the data I had to write my own business logic to parse through the array count of 40. 
- 
+ ![image](https://user-images.githubusercontent.com/72278830/111210454-8f115600-85cd-11eb-8cfa-23013857716c.png)
+
 What I learnt while developing this app:
 1.	Foremost, the debugging skill.  Using breakpoints to understand the flow, googling the error and fixing the bug. Still a long way to go.
 2.	API integration. Understanding basics of request and response. Fetch() method, endpoints, JSON objects. 
