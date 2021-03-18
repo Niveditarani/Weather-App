@@ -23,7 +23,9 @@ input.addEventListener("keyup", function(event){
         // Cancel the default action, if needed
         event.preventDefault();
         city = input.value;
+        document.getElementById("search").value=""; 
         getSearchWeather(city)
+
         console.log(city)
     }
 })
@@ -87,6 +89,9 @@ function getSearchWeather(city){
             weather.country = data.city.country;
             weather.wind = data.list[0].wind.speed;
             weather.humidity = data.list[0].main.humidity;
+            var ts = data.list[0].dt;
+            var now = new Date(ts * 1000);
+            dateElement.innerHTML = dateBuilder(now);
         })
         .then (function(){
             displayWeather(periodicData.list, apiName);
@@ -114,6 +119,8 @@ function getWeather(latitude, longitude){
             weather.country = "";
             weather.wind = data.current.wind_speed;
             weather.humidity = data.current.humidity;
+            let now = new Date();
+            dateElement.innerHTML = dateBuilder(now);
         })
         .catch(err => {
             // Do something for an error here
@@ -133,8 +140,11 @@ function displayWeather(periodicData, apiName){
     feelsLikeElement.innerHTML = ` ${weather.feels}`;
     windElement.innerHTML = ` ${weather.wind}`;
     humidityElement.innerHTML = ` ${weather.humidity}`;
-    let now = new Date();
-    dateElement.innerHTML = dateBuilder(now);
+    // let now = new Date();
+    // dateElement.innerHTML = dateBuilder(now);
+    // var ts = data.list[0].dt;
+    // var now = new Date(ts * 1000);
+    // dateElement.innerHTML = dateBuilder(now);
     //render the forcasts tabs
     if(apiName === "geoLoc"){
         document.getElementById("hourlyForecast").innerHTML = renderHourlyForecast(periodicData.hourly);
