@@ -36,7 +36,7 @@ weather.temperature = {
     unit : "celsius"
 }
 // APP CONSTS AND VARS
-const KELVIN = 273;
+const KELVIN = 273.15;
 // API KEY Moved to server side/Nodejs Application
 const key = "";
 
@@ -81,7 +81,7 @@ function getSearchWeather(city){
         .then (function(data){
             periodicData = data;
             var resultsHTML = "";
-            weather.temperature.value = Math.floor(data.list[0].main.temp - KELVIN);
+            weather.temperature.val = Math.floor(data.list[0].main.temp - KELVIN);
             weather.feels= Math.floor(data.list[0].main.feels_like- KELVIN);
             weather.description = data.list[0].weather[0].description;
             weather.iconId = data.list[0].weather[0].icon;
@@ -111,7 +111,8 @@ function getWeather(latitude, longitude){
             periodicData = data;
             var resultsHTML = "";
             // var ts= new Date(data.current.dt * 1000);
-            weather.temperature.value = Math.floor(data.current.temp - KELVIN);
+            weather.temperature.val = Math.floor(data.current.temp - KELVIN);
+            console.log("geoloc initial temp value", weather.temperature.val);
             weather.feels= Math.floor(data.current.feels_like- KELVIN);
             weather.description = data.current.weather[0].description;
             weather.iconId = data.current.weather[0].icon;
@@ -133,7 +134,7 @@ function getWeather(latitude, longitude){
 //display weather to UI
 function displayWeather(periodicData, apiName){
     iconElement.innerHTML = `<img src="icons/${weather.iconId}.png"/>`;
-    tempElement.innerHTML = `${weather.temperature.value}°<span>C</span>`;
+    tempElement.innerHTML = `${weather.temperature.val}°<span>C</span>`;
     descElement.innerHTML = weather.description;
     cityElement.innerHTML = ` ${weather.city} ${weather.country}`;
     // countryElement.innerHTML = ` ,`;
@@ -320,16 +321,18 @@ function celsiusToFahrenheit(temperature){
 }
 //when user clicks on temperature element
 tempElement.addEventListener("click", function(){
-    if(weather.temperature.value === undefined) return;
+    if(weather.temperature.val === undefined) return;
 
     if(weather.temperature.unit == "celsius"){
-        let fahrenheit = celsiusToFahrenheit(weather.temperature.value);
+        console.log("geoloc before F temp value", weather.temperature.val);
+        let fahrenheit = celsiusToFahrenheit(weather.temperature.val);
         fahrenheit = Math.floor(fahrenheit);
 
         tempElement.innerHTML = `${fahrenheit}°<span>F</span>`;
         weather.temperature.unit = "fahrenheit";
     }else{
-        tempElement.innerHTML = `${weather.temperature.value}°<span>C</span>`;
+        tempElement.innerHTML = `${weather.temperature.val}°<span>C</span>`;
         weather.temperature.unit = "celsius"
+        
     }
 })
