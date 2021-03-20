@@ -60,7 +60,7 @@ function showError(error){
     notificationElement.innerHTML = `<p>${error.message}</p>`;
 }
 searchElement.addEventListener("click", function(event){
-    console.log("hi")
+    // console.log("hi")
 if(input.value === "")
     navigator.geolocation.getCurrentPosition(setPosition, showError);
     //  getWeather(latitude, longitude);
@@ -76,11 +76,19 @@ function getSearchWeather(city){
     fetch(api)
         .then(function(response){
             let data = response.json();
-            return data;
+                return data;
         })
         .then (function(data){
+            if(data.cod!="200"){
+                notificationElement.style.display= "block";
+                notificationElement.innerHTML = `<p>${data.message}</p>`;
+                // weather = "";
+                // clearVal();
+
+            } else {
             periodicData = data;
             var resultsHTML = "";
+            notificationElement.innerHTML = "";
             weather.temperature.val = Math.floor(data.list[0].main.temp - KELVIN);
             weather.feels= Math.floor(data.list[0].main.feels_like- KELVIN);
             weather.description = data.list[0].weather[0].description;
@@ -92,6 +100,7 @@ function getSearchWeather(city){
             var ts = data.list[0].dt;
             var now = new Date(ts * 1000);
             dateElement.innerHTML = dateBuilder(now);
+            }
         })
         .then (function(){
             displayWeather(periodicData.list, apiName);
@@ -124,7 +133,6 @@ function getWeather(latitude, longitude){
             dateElement.innerHTML = dateBuilder(now);
         })
         .catch(err => {
-            // Do something for an error here
             throw (`Sorry, An Error occured.  ${err}`);
         })
         .then (function(){
@@ -141,12 +149,6 @@ function displayWeather(periodicData, apiName){
     feelsLikeElement.innerHTML = ` ${weather.feels}`;
     windElement.innerHTML = ` ${weather.wind}`;
     humidityElement.innerHTML = ` ${weather.humidity}`;
-    // let now = new Date();
-    // dateElement.innerHTML = dateBuilder(now);
-    // var ts = data.list[0].dt;
-    // var now = new Date(ts * 1000);
-    // dateElement.innerHTML = dateBuilder(now);
-    //render the forcasts tabs
     if(apiName === "geoLoc"){
         document.getElementById("hourlyForecast").innerHTML = renderHourlyForecast(periodicData.hourly);
         document.getElementById("dailyForecast").innerHTML = renderDailyForecast(periodicData.daily);
@@ -155,6 +157,18 @@ function displayWeather(periodicData, apiName){
         document.getElementById("dailyForecast").innerHTML = renderCityDailyForecast(periodicData);
     }
 }
+// function clearVal(){
+//     iconElement.innerHTML = "";
+//     tempElement.innerHTML = "";
+//     descElement.innerHTML = "";
+//     cityElement.innerHTML = "";
+//     countryElement.innerHTML = ` ,`;
+//     feelsLikeElement.innerHTML = "";
+//     windElement.innerHTML = "";
+//     humidityElement.innerHTML = "";
+//     resultsHTML = "";
+// }
+
 //render the hourly forecast-1
 function renderHourlyForecast(fcData) {
 
