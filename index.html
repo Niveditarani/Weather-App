@@ -21,19 +21,26 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <script src="script.js" defer></script>
+    <!-- <script src="searchScript.js" defer></script> -->
     <script src="tabScript.js" defer></script>
     <title>Weather App</title>
 </head>
 <body>
     <div class="container">
-        <!-- <div class="wrapper"> -->
+        <!-- <div class="wrapper">  onclick="addCities()"-->
             <div class="search-box">
-                <input type="text" id="search" data-city-search placeholder="Search by city name" autocomplete="off"> 
+                <input type="search" id="search" placeholder="Search by city name" onfocus="loadCities()"> 
                 <div class="search-btn">
-                    <img src="icons/magnify.png" alt="location" >
+                    <img src="icons/magnify.png" alt="location">
                 </div> 
             <!-- </div>  -->
-        </div>         
+            </div>   
+            <!--Search history-->     
+            <div class="searchHistory">
+                <ul id="contentHistory">
+                    <li id="historyItem"></li>
+                </ul>
+            </div>
                     
         <div class="notification"></div>
         <main>
