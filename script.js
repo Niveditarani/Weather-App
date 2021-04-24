@@ -1,34 +1,38 @@
 // SELECT ELEMENTS
 const searchElement = document.querySelector(".search-btn");
 const cityElement = document.querySelector(".city");
-// const countryElement = document.querySelector(".country");
 const dateElement = document.querySelector(".date");
 const descElement = document.querySelector(".temp-description p");
 const iconElement = document.querySelector(".weather-icon");
 const tempElement = document.querySelector(".temp-value p");
 const feelsLikeElement = document.querySelector(".feels-like span");
+const searchHistoryElement = document.querySelector(".searchHistory");
 const notificationElement = document.querySelector(".notification");
 const windElement = document.querySelector(".wind-speed span");
 const humidityElement = document.querySelector(".humidity span");
 
-var input = document.getElementById("search");
+let input = document.getElementById("search");
 
 let latitude = 0.0;
 let longitude = 0.0;
 
+
 input.addEventListener("keyup", function(event){
     let city;
-    // Number 13 is the "Enter" key on the keyboard
+    
     if (event.key === "Enter") {
         // Cancel the default action, if needed
         event.preventDefault();
         city = input.value;
+        searchHistoryElement.style.display= "none";
+        document.getElementById('search').blur();
         document.getElementById("search").value=""; 
-        getSearchWeather(city)
-
-        console.log(city)
+        
+        getSearchWeather(city);
     }
 })
+
+
 // App data
 const weather = {}
 
@@ -68,7 +72,6 @@ else
     getSearchWeather(input.value);
 })
 function getSearchWeather(city){
-   // var city = input.value;https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${key}
 
     let api = `https://project-weather-api-dk.herokuapp.com/getWeatherbyCity/?city=${city}`;
     let periodicData = "";
@@ -82,8 +85,6 @@ function getSearchWeather(city){
             if(data.cod!="200"){
                 notificationElement.style.display= "block";
                 notificationElement.innerHTML = `<p>${data.message}</p>`;
-                // weather = "";
-                // clearVal();
 
             } else {
             periodicData = data;
@@ -100,10 +101,9 @@ function getSearchWeather(city){
             var ts = data.list[0].dt;
             var now = new Date(ts * 1000);
             dateElement.innerHTML = dateBuilder(now);
-            }
-        })
-        .then (function(){
             displayWeather(periodicData.list, apiName);
+            searchCity(city);
+            }
         });
 }
 function getWeather(latitude, longitude){
@@ -113,13 +113,11 @@ function getWeather(latitude, longitude){
     fetch(api)
         .then(function(response){
             let data = response.json();
-            // console.log(data);
             return data;
         })
         .then (function(data){
             periodicData = data;
             var resultsHTML = "";
-            // var ts= new Date(data.current.dt * 1000);
             weather.temperature.val = Math.floor(data.current.temp - KELVIN);
             console.log("geoloc initial temp value", weather.temperature.val);
             weather.feels= Math.floor(data.current.feels_like- KELVIN);
@@ -145,7 +143,6 @@ function displayWeather(periodicData, apiName){
     tempElement.innerHTML = `${weather.temperature.val}°<span>C</span>`;
     descElement.innerHTML = weather.description;
     cityElement.innerHTML = ` ${weather.city} ${weather.country}`;
-    // countryElement.innerHTML = ` ,`;
     feelsLikeElement.innerHTML = ` ${weather.feels}`;
     windElement.innerHTML = ` ${weather.wind}`;
     humidityElement.innerHTML = ` ${weather.humidity}`;
@@ -157,18 +154,51 @@ function displayWeather(periodicData, apiName){
         document.getElementById("dailyForecast").innerHTML = renderCityDailyForecast(periodicData);
     }
 }
-// function clearVal(){
-//     iconElement.innerHTML = "";
-//     tempElement.innerHTML = "";
-//     descElement.innerHTML = "";
-//     cityElement.innerHTML = "";
-//     countryElement.innerHTML = ` ,`;
-//     feelsLikeElement.innerHTML = "";
-//     windElement.innerHTML = "";
-//     humidityElement.innerHTML = "";
-//     resultsHTML = "";
-// }
+function searchCity(data){
+    
+    // Get the existing data
+    let cityList = localStorage.getItem('CityList');
 
+    // If no existing data, create an array
+	// Otherwise, convert the localStorage string to an array
+	cityList = cityList ? JSON.parse(cityList) : {};
+    //Add new data to localStorage Array
+    cityList.push(data);   
+    let myJSON = JSON.stringify(cityList);
+    localStorage.setItem("CityList", myJSON);
+    document.getElementById("search").value=""; 
+}
+    
+function loadCities(){
+    //Retrieving data
+    let cityList = localStorage.getItem('CityList');
+    let cityResponseList = JSON.parse(cityList);
+    let uniqueCities = [...new Set(cityResponseList)];
+    let revList = uniqueCities.reverse();
+    let newRevList = revList.slice(0, 10);
+    if(newRevList.length !== 0){
+        searchHistoryElement.style.display= "block";
+    }else{
+        searchHistoryElement.style.display= "none";
+        
+    }
+    
+    let cLength = newRevList.length;
+    let cityLst = "<ul>";
+    for(let i=0; i < cLength; i++){
+        cityLst += "<li>" + revList[i] + "</li>";
+    }
+    cityLst += "</ul>";
+    document.getElementById("contentHistory").innerHTML = cityLst;
+    let items = document.querySelectorAll("#contentHistory li");
+    for(let i=0; i<items.length; i++){
+       items[i].onclick = function(){
+            document.getElementById("search").value = this.innerHTML;
+            searchHistoryElement.style.display= "none";
+        };
+    }
+    
+}
 //render the hourly forecast-1
 function renderHourlyForecast(fcData) {
 
@@ -273,8 +303,6 @@ function renderDailyForecast(fcData) {
         // let summary = fcData.data[i].summary;
         weather.temperature.value = Math.floor(fcData[i].temp.max - KELVIN);
         tempVal = `${weather.temperature.value}°C`;
-        // let tempHigh = `${Math.round(fcData.data[i].temperatureHigh)}&deg`;
-        // let tempLow = `${Math.round(fcData.data[i].temperatureLow)}&deg`;
 
         resultsHTML += renderRow(dayTime, pic, tempVal);
     }
@@ -302,9 +330,7 @@ function renderCityDailyForecast(fcData) {
             pic = `<img src="icons/${wIcon}.png" width= "18px" height = "18px"/>`
             // let summary = fcData.data[i].summary;
             weather.temperature.value = Math.floor(fcData[i].main.temp - KELVIN);
-            tempVal = `${weather.temperature.value}°C`;
-            // let tempHigh = `${Math.round(fcData.data[i].temperatureHigh)}&deg`;
-            // let tempLow = `${Math.round(fcData.data[i].temperatureLow)}&deg`;    
+            tempVal = `${weather.temperature.value}°C`;  
            resultsHTML += renderRow(dayTime, pic, tempVal);
         }
         
