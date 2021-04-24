@@ -161,7 +161,7 @@ function searchCity(data){
 
     // If no existing data, create an array
 	// Otherwise, convert the localStorage string to an array
-	cityList = cityList ? JSON.parse(cityList) : {};
+	cityList = cityList ? JSON.parse(cityList) : [];
     //Add new data to localStorage Array
     cityList.push(data);   
     let myJSON = JSON.stringify(cityList);
