@@ -32,6 +32,16 @@ input.addEventListener("keyup", function(event){
     }
 })
 
+//click outside search box to hide search history
+window.onload = function(){
+    document.onclick = function(e){
+        if((e.target.id === 'container') || (e.target.id === 'backgroundOverlay') ){
+            searchHistoryElement.style.display = 'none';
+        }
+    };
+};
+
+
 
 // App data
 const weather = {}
