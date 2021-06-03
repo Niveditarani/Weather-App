@@ -25,7 +25,17 @@ html {
   align-items: center;
   z-index: 99;
   transition: all 0.5s ease;
+  /* animation: fadeOut forwards 2s; */
 }
+/* @keyframes fadeOut {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+} */
+
 .cloud1,
 .cloud2,
 .cloud3 {
@@ -36,27 +46,37 @@ html {
 .cloud1 {
   top: 15%;
   transform: translate(100%, -15%);
-  animation: clouds 9.5s ease-in infinite 2s;
+  animation: clouds 9.2s ease-in infinite 2s;
 }
 .cloud2 {
   top: 30%;
   transform: translate(100%, -30%);
-  animation: clouds 7s ease-in infinite;
+  animation: clouds 8.2s ease-in infinite;
 }
 .cloud3 {
   top: 41%;
   transform: translate(100%, -41%);
-  animation: clouds 8.2s ease-in infinite 1s;
+  animation: clouds 8.7s ease-in infinite 1s;
 }
 .sun {
   position: absolute;
   top: 25%;
+  animation: roll 16s infinite;
 }
+@keyframes roll {
+  0% {
+    transform: rotate(0);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
 .preloader h3 {
   position: absolute;
-  top: 75%;
+  top: 65%;
   transform: translateY(-75%);
-  color: #161616;
+  color: #2c2222;
   font-size: 2rem;
 }
 @keyframes clouds {
@@ -64,12 +84,8 @@ html {
     right: 0%;
   }
   to {
-    right: 130%;
+    right: 100%;
   }
-}
-.preloader-finish {
-  z-index: 0;
-  pointer-events: none;
 }
 
 body {
