@@ -25,15 +25,20 @@
     <script src="tabScript.js" defer></script>
     <title>Weather App</title>
 </head>
-<body>
-    <div class="container">
-        <!-- <div class="wrapper">  onclick="addCities()"-->
+<body id= "backgroundOverlay">
+    <div class="preloader">
+        <img class="sun" src="icons/01d.png" alt="sun">
+        <h3>Weather App Loading...</h3>
+        <img class="cloud1" src="icons/04d.png" alt="cloud1">
+        <img class="cloud2" src="icons/04d.png" alt="cloud2">
+        <img class="cloud3" src="icons/04d.png" alt="cloud3">
+    </div>
+    <div id="container">
             <div class="search-box">
                 <input type="text" autocomplete="anyrandomstring" id="search" placeholder="Search by city name" onfocus="loadCities()"> 
                 <div class="search-btn">
                     <img src="icons/magnify.png" alt="location">
                 </div> 
-            <!-- </div>  -->
             </div>   
             <!--Search history-->     
             <div class="searchHistory">
