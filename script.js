@@ -10,6 +10,8 @@ const searchHistoryElement = document.querySelector(".searchHistory");
 const notificationElement = document.querySelector(".notification");
 const windElement = document.querySelector(".wind-speed span");
 const humidityElement = document.querySelector(".humidity span");
+const preloader = document.querySelector('.preloader');
+let showPreloader = true; 
 
 let input = document.getElementById("search");
 
@@ -126,6 +128,8 @@ function getWeather(latitude, longitude){
             return data;
         })
         .then (function(data){
+            // showPreloader = false;
+            preloader.style.display = 'none';
             periodicData = data;
             var resultsHTML = "";
             weather.temperature.val = Math.floor(data.current.temp - KELVIN);
