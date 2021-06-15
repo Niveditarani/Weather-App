@@ -1,12 +1,3 @@
-/*******************************************preloader**********************************/
-const preloader = document.querySelector('.preloader');
-window.addEventListener('load', () => {
-    setTimeout(() => {
-        preloader.style.display = 'none';
-    },4200);
-    
-});
-
 
 /******************************forecast table***********************************/
 function openForecast(evt, tabName){
