@@ -452,7 +452,7 @@ hr {
   }
 }
 
-@media screen and (min-width: 1371px) and (max-width: 2000px) {
+@media screen and (min-width: 1371px) {
   #container {
     max-width: 650px;
     height: 900px;
@@ -519,8 +519,8 @@ hr {
     padding: 0.6rem;
   }
   .footer-bottom {
-    bottom: 9.2%;
-    max-width: 35%;
+    bottom: 14.5%;
+    max-width: 20%;
     font-size: 0.6rem;
   }
 }
